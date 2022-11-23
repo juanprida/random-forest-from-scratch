@@ -1,39 +1,45 @@
-"""Scrach implementation for a binary decision tree classifier."""
+"""Scratch implementation of a decision tree classifier."""
 
 from collections import Counter
+from typing import Union, Tuple
 import numpy as np
-from typing import Union, Dict
 
 
 class Node:
-    """
-    _summary_
-    """
+    """Base class for tree nodes."""
 
     def __init__(
-        self, mean=None, depth=None, column=None, value=None, gini=None, samples=None, left=None, right=None
+        self,
+        mean: float,
+        depth: int,
+        column: int,
+        value: float,
+        gini: float,
+        samples: int,
+        left=None,
+        right=None,
     ) -> None:
         """
-        _summary_
+        Init method.
 
         Parameters
         ----------
-        mean : _type_, optional
-            _description_, by default None
-        depth : _type_, optional
-            _description_, by default None
-        column : _type_, optional
-            _description_, by default None
-        value : _type_, optional
-            _description_, by default None
-        gini : _type_, optional
-            _description_, by default None
-        samples : _type_, optional
-            _description_, by default None
-        left : _type_, optional
-            _description_, by default None
-        right : _type_, optional
-            _description_, by default None
+        mean : float
+            Indicate constant prediction for the node.
+        depth : int
+            Indicate depth of current node in the tree.
+        column : int
+            Indicate colum on where to perform split for children branches.
+        value : float
+            Indicate value on where to perform the split for children branches.
+        gini : float
+            Indicate gini impurity at the node.
+        samples : int
+            Indicate
+        left : Node, optional
+            Hold left children node, by default None.
+        right : Node, optional
+            Hold left children node, by default None.
         """
         self.mean = mean
         self.depth = depth
@@ -46,71 +52,68 @@ class Node:
 
 
 class DecisionTreeClassifier:
-    """
-    _summary_
-    """
+    """Custom decision tree classifier."""
 
     def __init__(
         self,
-        max_depth: int = None,
+        max_depth: int = np.inf,
         min_samples_split: int = 2,
         min_samples_leaf: int = 1,
         min_impurity_decrease: float = 0.0,
     ) -> None:
         """
-        _summary_
+        Init method.
 
         Parameters
         ----------
-        max_depth : int, optional
-            _description_, by default None
+        max_depth : int, np.inf
+            Indicate maximum depth of the tree, by default np.inf
         min_samples_split : int, optional
-            _description_, by default 2
+            Indicate minimum number of samples to split a node, by default 2
         min_samples_leaf : int, optional
-            _description_, by default 1
+            The minimum number of samples required to be at a leaf node, by default 1
         min_impurity_decrease : float, optional
-            _description_, by default 0.0
+            A split will be performed decrease of the impurity is greater than this value, by default 0.0
         """
         self.tree = None
-        self.max_depth = np.inf if max_depth == None else max_depth
+        self.max_depth = max_depth
         self.min_samples_split = min_samples_split
         self.min_samples_leaf = min_samples_leaf
         self.min_impurit_decrease = min_impurity_decrease
 
     @staticmethod
-    def _compute_gini(n0, n1) -> float:
+    def _compute_gini(negative_samples: int, positive_samples: int) -> float:
         """
-        _summary_
+        Measure gini impurity for binary distribution.
 
         Parameters
         ----------
-        n0 : _type_
-            _description_
-        n1 : _type_
-            _description_
+        negative_samples : int
+            Indicate amount of negative (0s) samples.
+        positive_samples : int
+            Indicate amount of positve (1s) samples.
 
         Returns
         -------
         float
-            _description_
+            Gini coefficient. Values will be between 0 and 0.5.
         """
-        if n0 == 0 or n1 == 0:
-            return 0
-
-        n = n0 + n1
+        if negative_samples == 0 or positive_samples == 0:
+            return 0.0
 
         # Scale counts.
-        p0 = n0 / n
-        p1 = n1 / n
+        samples = negative_samples + positive_samples
+        p0 = negative_samples / samples
+        p1 = positive_samples / samples
 
         # Compute gini impurity.
-        gini = 1 - (p0**2 + p1**2)
+        gini = 1.0 - (p0**2 + p1**2)
 
         return gini
 
-    def _search_best_split(self, X: np.array, y: np.array) -> Dict[str, Union[float, int]]:
+    def _search_best_split(self, X: np.array, y: np.array) -> Tuple[Union[float, int]]:
         """
-        Return the column and value on where to split dataset to produce the larger information gain.
+        Return the column and value on where to split dataset to produce the larger impurity decrease.
 
         Parameters
         ----------
@@ -121,12 +124,12 @@ class DecisionTreeClassifier:
 
         Returns
         -------
-        Dict[str, Union[float, int]]
-            Dictionary containing column and value on where to perform the split and gini obtained.
+        Tuple[Union[float, int]]
+            Tuple containing column and value on where to perform the split, gini obtained and samples in the node.
         """
         best_col = None
         best_value = None
-        # Count 0/1's.
+        # Count negative and positive samples.
         counter = Counter(y)
         n = len(X)
         parent_gini = self._compute_gini(counter[0], counter[1])
@@ -141,20 +144,21 @@ class DecisionTreeClassifier:
                 X = X[ordered_index]
                 y = y[ordered_index]
 
-                # Start assigning all samples into left branch.
+                # Start assigning all samples into right branch.
                 left_n0, left_n1 = 0, 0
                 right_n0, right_n1 = counter[0], counter[1]
 
+                # For every row, we update left and right branch with y values.
                 for row, value in enumerate(X[:, col]):
                     target = y[row]
 
-                    # Update left branch by substracting target value.
+                    # Update left branch by adding target value.
                     left_n0 += 1 - target
                     left_n1 += target
                     left_n = left_n0 + left_n1
                     left_gini = self._compute_gini(left_n0, left_n1) * (left_n)
 
-                    # Update right branch by adding target value.
+                    # Update right branch by substracting target value.
                     right_n0 -= 1 - target
                     right_n1 -= target
                     right_n = right_n0 + right_n1
@@ -175,7 +179,7 @@ class DecisionTreeClassifier:
 
         return (best_col, best_value, parent_gini, n)
 
-    def fit(self, X: np.array, y: np.array, depth=0) -> None:
+    def fit(self, X: np.array, y: np.array, depth=0) -> Node:
         """Build a decision tree classifier from the training set (X, y).
 
         Parameters
@@ -192,21 +196,23 @@ class DecisionTreeClassifier:
         self : DecisionTreeClassifier
             Fitted estimator.
         """
+        # Search best split and initialize a node with the information.
         column, value, gini, samples = self._search_best_split(X, y)
-        if self.tree == None:
-            self.tree = node = Node(
-                mean=np.mean(y), depth=depth, column=column, value=value, gini=gini, samples=samples
-            )
-        else:
-            node = Node(mean=np.mean(y), depth=depth, column=column, value=value, gini=gini, samples=samples)
+        node = Node(mean=np.mean(y), depth=depth, column=column, value=value, gini=gini, samples=samples)
 
-        if node.column and node.value and depth <= self.max_depth:
+        # Set first node as root.
+        if self.tree is None:
+            self.tree = node
 
+        # If there's a possible split to do, repeat the process.
+        if node.column is not None and node.value is not None and depth <= self.max_depth:
+            # Define conditions for both branches.
             left_condition = X[:, node.column] <= node.value
             right_condition = ~left_condition
-
+            # Let the magic begin.
             node.left = self.fit(X[left_condition], y[left_condition], depth + 1)
             node.right = self.fit(X[right_condition], y[right_condition], depth + 1)
+
         return node
 
     def predict_proba(self, X: np.array) -> np.array:
@@ -235,11 +241,12 @@ class DecisionTreeClassifier:
                     node = node.right
             # Store prediction.
             y[sample] = node.mean
+
         return y
-    
+
     def predict(self, X: np.array) -> np.array:
         """Predict class or regression value for X.
-        
+
         Parameters
         ----------
         X : np.array
@@ -250,4 +257,4 @@ class DecisionTreeClassifier:
         np.array
             1th dimensional array containing predicted classes.
         """
-        return np.round(self.predict_proba(X))
+        return np.round(self.predict_proba(X)).astype('int')
