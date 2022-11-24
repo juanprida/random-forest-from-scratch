@@ -6,7 +6,7 @@
 
 A minimal implementation of different tree-based-models with a scikit learn-like API (`.fit()` and `.predict()` ;)) in fully Python.
 
-First model (and only so far) is `DecisionTreeClassifier` looks to minimize impurity in target data by creating partitions of the samples. We stick to  gini coefficient for measuring impurity.
+First model (and only so far) is `DecisionTreeClassifier` which looks to minimize impurity in target data by creating partitions of the samples. We stick to gini coefficient for measuring impurity.
 
 ### Example usage
 ```
