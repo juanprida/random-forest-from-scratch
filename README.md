@@ -33,7 +33,7 @@ There's an execution of the models in `demo.ipynb`.
 Inside of `src.decision_tree_classifier.py` you can find all the code needed to create the DecisionTreeClassifier.
 
 #### Main steps are:
-- Compute gini coefficients with `._compute_gini()`.
+- Compute gini coefficients with `_compute_gini()`.
 - Find best split for a given node with `_search_best_split()`
-- Grow the full tree using recursion with (obviosuly) `.fit()`
-- Traverse the tree with `.predict()`.
+- Grow the full tree using recursion with (obviosuly) `fit()`
+- Traverse the tree with `predict()`.
