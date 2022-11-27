@@ -52,7 +52,26 @@ class Node:
 
 
 class DecisionTreeClassifier:
-    """Custom decision tree classifier."""
+    """
+    Decision tree classifier.
+
+    Attributes
+    ----------
+    tree : Node
+        Underlying tree object made up of different nodes.
+    max_depth : int
+        Indicate maximum depth of the tree
+    min_samples_split : int
+        Indicate minimum number of samples to split a node
+    min_samples_leaf : int
+        The minimum number of samples required to be at a leaf node
+    min_impurity_decrease : float
+        A split will be performed decrease of the impurity is greater than this value
+
+    References
+    ----------
+    [1] L. Breiman, J. Friedman, R. Olshen, and C. Stone, “Classification and Regression Trees”, Wadsworth, Belmont, CA, 1984.
+    """
 
     def __init__(
         self,
@@ -66,7 +85,7 @@ class DecisionTreeClassifier:
 
         Parameters
         ----------
-        max_depth : int, np.inf
+        max_depth : int, optional
             Indicate maximum depth of the tree, by default np.inf
         min_samples_split : int, optional
             Indicate minimum number of samples to split a node, by default 2
@@ -135,8 +154,8 @@ class DecisionTreeClassifier:
         parent_gini = self._compute_gini(counter[0], counter[1])
         best_gini = parent_gini
 
+        # If number of samples meets requirement, then start search.
         if n >= self.min_samples_split:
-
             # Iterate through every column.
             for col in range(X.shape[1]):
                 # Sort X and y based on col.
@@ -180,7 +199,8 @@ class DecisionTreeClassifier:
         return (best_col, best_value, parent_gini, n)
 
     def fit(self, X: np.array, y: np.array, depth=0) -> Node:
-        """Build a decision tree classifier from the training set (X, y).
+        """
+        Build a decision tree classifier from the training set (X, y).
 
         Parameters
         ----------
@@ -216,7 +236,8 @@ class DecisionTreeClassifier:
         return node
 
     def predict_proba(self, X: np.array) -> np.array:
-        """Predict class probabilities of the input samples X.
+        """
+        Predict probabilities of the input samples X.
 
         Parameters
         ----------
@@ -245,7 +266,8 @@ class DecisionTreeClassifier:
         return y
 
     def predict(self, X: np.array) -> np.array:
-        """Predict class or regression value for X.
+        """
+        Predict class or regression value for X.
 
         Parameters
         ----------
