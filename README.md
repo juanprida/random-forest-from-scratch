@@ -4,7 +4,7 @@
   <img src="https://github.com/juanprida/tree-based-models-from-scratch/blob/master/tree_picture.jpg?raw=true" alt="Tree image"/>
 </p>
 
-A minimal implementation of different tree-based-models with a scikit learn-like API (`.fit()` and `.predict()` ;)) in fully Python.
+A minimal implementation of different tree-based-models with a scikit learn-like API (`.fit()` and `.predict()` ;)).
 
 First model (and only so far) is `DecisionTreeClassifier` which looks to minimize impurity in target data by creating partitions of the samples. We stick to gini coefficient for measuring impurity.
 
