@@ -1,7 +1,6 @@
 ## Scratch implementation for different tree based models.
 A minimal implementation of different tree-based-models with a scikit learn-like API (`.fit()` and `.predict()` ;)).
 
-
 ### Introduction.
 Tree based models are the most popular types of models used in machine learning for tabular data mostly because of their high accuracy and relatively low computational cost.
 
@@ -14,7 +13,6 @@ Even if decision trees are a good first approach offering high interpretability,
 
 In this project, we build from scratch two classifiers: `DecisionTreeClassifier` and `RandomForestClassifier`.
 
-
 ### Decision Tree Classifier
 
 <p align="center">
@@ -22,7 +20,6 @@ In this project, we build from scratch two classifiers: `DecisionTreeClassifier`
 </p>
 
 Inside of `src.decision_tree_classifier.py` you can find all the code needed to create the `DecisionTreeClassifier`.
-
 
 #### Main steps are:
 - **Compute impurity:**
@@ -42,8 +39,7 @@ Computing impurity and find best split, accounts for 90% of the job. The rest is
 - Traverse the tree with `predict()`.
 When we need to return a prediction, we traverse the fitted tree with a new input and return the mean of the leaf node.
 
-
-### Example usage
+#### Example usage
 ```
 from decision_tree_classifier import DecisionTreeClassifier
 
@@ -61,3 +57,12 @@ decision_tree.fit(X, y)
 # Predict.
 y_train_hat = decision_tree.predict(X)
 ```
+
+### Random Forest Classifier
+
+<p align="center">
+  <img src="https://github.com/juanprida/tree-based-models-from-scratch/blob/master/forest_picture.jpg?raw=true" alt="Tree image"/>
+</p>
+
+Inside of `src.random_forest_classifier.py` you can find all the code needed to create the `RandomForestClassifier`.
+
