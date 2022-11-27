@@ -41,7 +41,7 @@ When we need to return a prediction, we traverse the fitted tree with a new inpu
 
 #### Example usage
 ```
-from decision_tree_classifier import DecisionTreeClassifier
+from src.decision_tree_classifier import DecisionTreeClassifier
 
 # Initialize class. 
 decision_tree = DecisionTreeClassifier(
@@ -55,7 +55,7 @@ decision_tree = DecisionTreeClassifier(
 decision_tree.fit(X, y)
 
 # Predict.
-y_train_hat = decision_tree.predict(X)
+y_hat = decision_tree.predict(X)
 ```
 
 ### Random Forest Classifier
@@ -65,4 +65,29 @@ y_train_hat = decision_tree.predict(X)
 </p>
 
 Inside of `src.random_forest_classifier.py` you can find all the code needed to create the `RandomForestClassifier`.
+
+#### Main steps are:
+TBA
+
+#### Example usage
+```
+from src.random_forest_classifier import RandomForestClassifier
+
+# Initialize class. 
+random_forest = RandomForestClassifier(
+    n_estimators=100,
+    max_depth=np.inf,
+    min_samples_split=8,
+    min_samples_leaf=1,
+    min_impurity_decrease=0.0,
+    bootstrap=True,
+    n_cores=None,
+)
+
+# Fit.
+random_forest.fit(X, y)
+
+# Predict.
+y_hat = random_forest.predict(X)
+```
 
