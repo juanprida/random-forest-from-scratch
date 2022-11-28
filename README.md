@@ -36,8 +36,9 @@ Another useful term is **Information gain** and it references to how much can we
 Computing impurity and find best split, accounts for 90% of the job. The rest is quite straightforward, we use recursion and repeat the process for every partition until we don't experience a decrease in impurity by performing a split.
 </br> The code is implemented under the method `.fit()`.
 
-- Traverse the tree with `predict()`.
+- **Traverse the tree and get predictions.**
 When we need to return a prediction, we traverse the fitted tree with a new input and return the mean of the leaf node.
+</br> The code is implemented under the method `predict_proba()` and `predict()`.
 
 #### Example usage
 ```
@@ -45,10 +46,10 @@ from src.decision_tree_classifier import DecisionTreeClassifier
 
 # Initialize class. 
 decision_tree = DecisionTreeClassifier(
-        max_depth = 10,
-        min_samples_split = 2,
-        min_samples_leaf = 1,
-        min_impurity_decrease = 0.0,
+    max_depth = 10,
+    min_samples_split = 2,
+    min_samples_leaf = 1,
+    min_impurity_decrease = 0.0,
 )
 
 # Fit.
