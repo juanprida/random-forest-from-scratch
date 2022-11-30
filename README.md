@@ -25,7 +25,7 @@ Inside of `src.decision_tree_classifier.py` you can find all the code needed to 
 - **Compute impurity:**
 </br> The core idea of a Decision Tree lies behind the concept of impurity. We say that a distribution is "more pure" if its elements are similar between them. 
 </br> For example, suppose that we are working with a binary variable. If a large proportion of the samples belongs to the same class (either 0 or 1) then we can say that the impurity in our data is low.
-</br> Luckily for us, there are a good amount of ways to translate this idea into plain algebra. Here we stick to Gini impurity. So, just remember the impurity of a distribution tries to explain how homogeneous/heterogeneous it is.
+</br> Luckily for us, there are a good amount of ways to translate this idea into plain algebra. Here we stick to Gini impurity.
 </br> Check the `_compute_gini()` for the implementation.
 
 - **Find best split for a given node:**
